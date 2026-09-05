@@ -49,7 +49,7 @@ salary VARCHAR(100)
 field  VARCHAR(100)
 ```
 
-## Run App Tier
+## App Tier
 
 On the App Server:
 
@@ -70,19 +70,19 @@ pm2 start index.js --name student-api
 pm2 save
 ```
 
-## Run Web Tier Locally
+## Web Tier
 
 ```bash
 cd application-code/web-tier
 npm install
-npm start
+npm run build
 ```
 
-The local frontend proxy sends `/api` requests to `http://localhost:4000`.
+For local development, use `npm start` after the package install. The local frontend proxy sends `/api` requests to `http://localhost:4000`.
 
 ## Production Web Deployment
 
-Build the frontend on a development machine:
+Build the frontend on the development machine:
 
 ```bash
 cd application-code/web-tier
@@ -96,7 +96,7 @@ Upload only the generated `build` folder to the web server or S3. Nginx serves:
 /home/ec2-user/web-tier/build
 ```
 
-The production web server does not need `npm start` or `node_modules`.
+The production web server does not need `npm start` or `node_modules`; Nginx serves the generated `build` folder.
 
 ## API Endpoints
 

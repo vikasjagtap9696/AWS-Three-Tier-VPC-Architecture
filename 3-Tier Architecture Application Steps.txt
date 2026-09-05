@@ -142,8 +142,6 @@ nvm use 16
 
 npm install -g pm2   [run this node as a service otherwise it will work as interactive mode]
 
-npm install mysql2 [installing mysql2 using npm to support our application]
-
 Download application code from S3 and start the application:
 ---------------------------------------------------------
 
@@ -217,9 +215,7 @@ aws s3 cp s3://3-tier-project-demo-6pm/application-code/web-tier/ web-tier --rec
 
 cd ~/web-tier
 npm install
-npm run build  [if you get build error, run the below command. this is due to some version mismatch]
-
-npm install eslint-plugin-jest@27 --save-dev
+npm run build  [run this on the development machine before production upload]
 
 
 sudo dnf install -y nginx

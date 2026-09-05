@@ -1,0 +1,18 @@
+# Dependencies
+**/node_modules/
+
+# React production output
+**/build/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+**/DbConfig.local.js
+
+# Logs and local tooling
+*.log
+npm-debug.log*
+error.txt
+.DS_Store
+.vscode/

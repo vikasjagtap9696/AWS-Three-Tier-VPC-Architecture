@@ -513,6 +513,15 @@ App-Tier/DbConfig.js
 
 with the RDS credentials.
 
+The current `DbConfig.js` reads these values from environment variables:
+
+```bash
+export DB_HOST="your-rds-endpoint"
+export DB_USER="your-database-user"
+export DB_PWD="your-database-password"
+export DB_DATABASE="webappdb"
+```
+
 After modification:
 
 ```text
@@ -636,6 +645,25 @@ CREATE TABLE IF NOT EXISTS transactions(
   description VARCHAR(100),
   PRIMARY KEY(id)
 );
+```
+
+Current student table used by the application:
+
+```sql
+CREATE TABLE IF NOT EXISTS students (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(100) NOT NULL,
+  salary VARCHAR(100) NOT NULL,
+  field VARCHAR(100) NOT NULL,
+  PRIMARY KEY (id)
+);
+```
+
+Example:
+
+```sql
+INSERT INTO students (name, salary, field)
+VALUES ('Aarav Mehta', '25000', 'AWS');
 ```
 
 Check tables:
@@ -763,6 +791,15 @@ Expected response:
 
 ```text
 This is the health check
+```
+
+Current student CRUD routes:
+
+```text
+GET    /students       Read all students
+POST   /students       Insert name, salary, and field
+PUT    /students/:id   Update name, salary, and field
+DELETE /students/:id  Delete one student
 ```
 
 ---

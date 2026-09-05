@@ -2,6 +2,10 @@
 
 A three-tier AWS application with a React web tier, an Express/Node.js app tier, and a private MySQL RDS database.
 
+## Architecture
+
+![AWS three-tier architecture](Architecture.webp)
+
 ## Features
 
 - Full-screen student management interface

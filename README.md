@@ -1,8 +1,3 @@
-Ho Abhi 👍 File madhla **complete content README.md format madhe properly organize** kela aahe—VPC, SG, S3, IAM, RDS, App Tier, Internal ALB, Web Tier, External ALB, ACM, Route 53, Auto Scaling, commands, configuration sagla include kela aahe. 
-
-**Copy-paste complete `README.md`:**
-
-````markdown
 # 🚀 3-Tier Architecture Application Deployment on AWS
 
 A production-style **3-Tier Architecture on AWS** with:
@@ -1937,6 +1932,3 @@ Highly Available + Scalable + Secure AWS Architecture
 ```
 
 **Production-style AWS 3-Tier Architecture — Highly Available, Scalable, Secure, and Load Balanced.**
-
-```
-```

@@ -42,7 +42,7 @@
     Create Database-SG - Inbound MySQL, Custom  = Allow from App-SG or 192.168.0.0/16. we are giving access to entire vpc traffic
     
 
-2. Create a S3 Private Bucket (aws-s3-bkt-tier-website) and upload the Code including application-code folder and install.sh
+2. Create a S3 Private Bucket (3-tier-project-demo) and upload the Code including application-code folder and install.sh
 
    2 Places need code modification  
    1 - App-Tier - DbConfig.js - Update RDS Creds
@@ -78,15 +78,11 @@
   Backups = NO [will create fastly]
   Encryption = yes
 
-Endpoint = your RDS endpoint
-Username = your database username
-Password = your database password
+Endpoint = my3tierdb.cdbmlufgqkjd.ap-south-1.rds.amazonaws.com
+Username = admin
+Password = root123456
 
-Set database environment variables on the App Server; do not commit credentials:
-export DB_HOST="your-rds-endpoint"
-export DB_USER="your-database-user"
-export DB_PWD="your-database-password"
-export DB_DATABASE="webappdb"
+Update credentials in App-Tier folder -  DbConfig.js
 
 --> upload this back to S3 bucket
 
@@ -132,17 +128,6 @@ SHOW TABLES;
 INSERT INTO transactions (amount, description) VALUES ('400', 'awsbill');
 SELECT * FROM transactions;
 
-CREATE TABLE IF NOT EXISTS students(
-    id INT NOT NULL AUTO_INCREMENT,
-    name VARCHAR(100) NOT NULL,
-    salary VARCHAR(100) NOT NULL,
-    field VARCHAR(100) NOT NULL,
-    PRIMARY KEY(id)
-);
-
-INSERT INTO students (name, salary, field) VALUES ('Aarav Mehta', '25000', 'AWS');
-SELECT * FROM students;
-
 exit
 
 Install and Configure Node.js and PM2 [PM - process manager]
@@ -162,7 +147,7 @@ npm install mysql2 [installing mysql2 using npm to support our application]
 Download application code from S3 and start the application:
 ---------------------------------------------------------
 
-aws s3 sync s3://aws-s3-bkt-tier-website/3tier-app-deployment-aws-main/application-code/app-tier/ app-tier --delete
+aws s3 cp s3://3-tier-project-demo-6pm/application-code/app-tier/ app-tier --recursive
 
 cd app-tier
 
@@ -174,12 +159,6 @@ pm2 logs
 pm2 startup   [to make it startup after reboot]
 
 curl http://localhost:4000/health   [This should respond with "This is the health check"]
-
-Student API endpoints:
-GET    /students       [read all students]
-POST   /students       [insert name, salary, field]
-PUT    /students/:id   [update name, salary, field]
-DELETE /students/:id   [delete one student]
 
 Create now internal load balancer and target group
 --------------------------------------------------
@@ -213,12 +192,6 @@ Upload it back to S3 .
 
 6. Create Web-Tier Resources including External Load Balancer
 
-Before deploying the web tier, run these commands on the development machine:
-cd application-code/web-tier
-npm install
-npm run build
-aws s3 sync build s3://aws-s3-bkt-tier-website/3tier-app-deployment-aws-main/application-code/web-tier/build/ --delete
-
 Web Tier Installation. Install Node.js and Nginx on the web tier:
 -----------------------------------------------------------------
 
@@ -240,14 +213,13 @@ source ~/.bashrc
 nvm install 16
 nvm use 16
 
-aws s3 sync s3://aws-s3-bkt-tier-website/3tier-app-deployment-aws-main/application-code/web-tier/ web-tier --delete
-
-sudo mkdir -p /home/ec2-user/web-tier/build
-sudo aws s3 sync s3://aws-s3-bkt-tier-website/3tier-app-deployment-aws-main/application-code/web-tier/build/ /home/ec2-user/web-tier/build/ --delete
+aws s3 cp s3://3-tier-project-demo-6pm/application-code/web-tier/ web-tier --recursive
 
 cd ~/web-tier
-# For production, upload a build created on the development machine.
-# Do not run npm start on the Nginx web server.
+npm install
+npm run build  [if you get build error, run the below command. this is due to some version mismatch]
+
+npm install eslint-plugin-jest@27 --save-dev
 
 
 sudo dnf install -y nginx
@@ -261,12 +233,7 @@ ls
 
 sudo rm nginx.conf   [Remove the default file and download our nginx.conf from S3 where it has our own configuration]
 
-sudo aws s3 cp s3://aws-s3-bkt-tier-website/3tier-app-deployment-aws-main/application-code/nginx.conf .
-
-# Frontend build must be present at this Nginx root:
-# /home/ec2-user/web-tier/build
-
-sudo nginx -t
+sudo aws s3 cp s3://3-tier-project-demo-1030/application-code/nginx.conf .
 
 sudo systemctl restart nginx
 
